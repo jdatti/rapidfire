@@ -55,6 +55,42 @@ module Rapidfire
       end
     end
 
+    def export
+      @objects = if params[:id]
+                 [Rapidfire::Survey.find(params[:id])]
+               else
+                 Rapidfire::Survey.all
+               end
+
+      respond_to do |format|
+        format.html{}
+      end
+    end
+
+  def import
+  end
+
+  def create_import
+    data   = params.require("import")["data"].to_s
+    survey  = YAML.load(data)
+    questions=survey.delete(:questions)
+    survey = Rapidfire::Survey.create(survey)
+    survey.questions << Rapidfire::Question.create(questions)
+    survey.save
+    if survey.errors.empty?
+      flash[:success] = action_cms("success", "Survey imported successfully.")
+      respond_to do |format|
+        format.html { redirect_to({ action: :index }) }
+      end
+    else
+      flash[:alert] = action_cms("invalid", errors: survey.errors.full_messages.join("|")) {"Could not import survey. %{errors}"}
+      respond_to do |format|
+        format.html { redirect_to({ action: :import }) }
+      end
+    end
+  end
+
+
     private
 
     def survey_params
