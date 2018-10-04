@@ -4,12 +4,17 @@
     <%= link_to "New Survey", new_survey_path %>
   <% end %>
 </p>
-<h4><%= link_to t('Back to home'), '/' %></h4>
+<div>
+  <h4><%= link_to t('Back to home'), '/' %></h4>
+  <h4><%= link_to t('Export All'), export_surveys_path() %></h4>
+  <h4><%= link_to t('Import'), import_surveys_path() %></h4>
+</div>
+
 <table class="table table-striped">
   <thead>
     <tr>
       <th>Survey</th>
-      <th>Action</th>
+      <th>Actions</th>
     </tr>
   </thead>
   <tbody>

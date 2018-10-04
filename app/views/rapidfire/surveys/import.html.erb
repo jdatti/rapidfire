@@ -1,0 +1,16 @@
+<% content_for :title, "login_interrupts".cms %>
+
+<div class="row">
+  <div class="col-md-12">
+   <h2><%= local_cms("import_new") { "Import New Survey" } %></h2>
+    <%= form_for :import, url: create_import_surveys_path do |f| %>
+      <%= f.text_area :data, {
+            placeholder: "paste_your_YAML_in_here".cms,
+            style: "height: 500px; width: 100%;"
+          } %>
+      <br>
+      <br>
+      <%= f.submit %>
+    <% end %>
+  </div>
+</div>

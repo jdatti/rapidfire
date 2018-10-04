@@ -13,6 +13,7 @@
         <% if can_administer? %>
           <li><%= link_to "Results", [:results, survey] %></li>
           <li><%= link_to "Delete", survey, method: :delete %></li>
+          <li><%= link_to "Export", export_survey_path(survey) %></li>
         <% end %>
       </ul>
     </td>
