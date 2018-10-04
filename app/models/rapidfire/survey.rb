@@ -8,6 +8,12 @@ module Rapidfire
       attr_accessible :name, :introduction
     end
 
+    def export
+      export_hash =self.serializable_hash(except: [:id ,:created_at,:updated_at])
+      export_hash.merge({questions: questions.map { |a| a.export }})
+
+    end
+
     def attempted? user = nil
       if(user.present?)
         Rapidfire::Attempt.exists? survey: self, user: user

@@ -15,6 +15,7 @@
         <% if can_administer? %>
           <li><%= link_to "Results", [:results, survey] %></li>
           <li><%= link_to "Delete", survey, method: :delete %></li>
+          <li><%= link_to "Export", export_survey_path(survey) %></li>
         <% else %>
           <li><%= link_to "view", survey_attempt_path(id: recent_attempt.id, survey_id: survey.id) %></li>
         <% end %>

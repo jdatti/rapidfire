@@ -12,6 +12,10 @@ module Rapidfire
       attr_accessible :survey, :question_text, :position, :default_text, :placeholder, :validation_rules, :answer_options
     end
 
+    def export
+      export_hash =self.serializable_hash(except: [:id ,:created_at,:updated_at,:survey_id]).merge(type: self.type)
+    end
+
     def self.inherited(child)
       child.instance_eval do
         def model_name
