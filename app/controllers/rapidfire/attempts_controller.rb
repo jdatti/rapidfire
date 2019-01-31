@@ -56,9 +56,12 @@ module Rapidfire
     private
 
     def check_resubmit_availability
-      if PyrCore::AppSetting.enable_survey_resubmission != "true"
-        respond_to do |format|
-          format.js { render "rapidfire/attempts/submitted" }
+      attempted_survey = Rapidfire::Attempt.where(user_id: current_user.id, survey_id: params[:survey_id]).last
+      if attempted_survey.present?
+        if PyrCore::AppSetting.enable_survey_resubmission != "true"
+          respond_to do |format|
+            format.js { render "rapidfire/attempts/submitted" }
+          end
         end
       end
     end
