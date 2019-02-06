@@ -1,4 +1,6 @@
-$("div.survey-attempt-form").remove();
+$("div.survey-attempt-form").html("<%= 'thank_you_for_attempting_survey'.cms {'Thank you for attempting the Survey'} %>");
+$('.web-alert-main .active-alert > div > div').removeClass('survey-attempt-form').addClass('alert alert-info');
+$('.attempts_new #main-content > div').removeClass('survey-attempt-form').addClass('alert alert-info');
 <%
   success_message = 'survey_success_message'.cms {'Thanks for your inputs.'}
 %>
