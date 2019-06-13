@@ -55,6 +55,34 @@ module Rapidfire
       end
     end
 
+    def clone_modal
+      @survey = Survey.find(params[:id])
+    end
+
+    def clone
+      orig_survey = Survey.find(params[:id])
+      Rails.logger.info("Original survey attributes in clone: #{orig_survey.attributes}")
+      @survey = Survey.new(orig_survey.attributes)
+      @survey.id = BSON::ObjectId.new
+      @survey.assign_attributes(survey_params)
+      Rails.logger.info("survey_params in clone: #{survey_params}")
+      Rails.logger.info("Attributes after assign: #{@survey.attributes}")
+
+      respond_to do |format|
+        if @survey.save
+          flash[:notice] = "survey_params.cloned_successsfully".cms{'Survey was successfully cloned.'}
+          format.js {
+            render js: "window.location.href='#{surveys_path(@survey)}', toastr.success('#{flash[:notice]}');"
+          }
+        else
+          errors = @survey.errors.full_messages.join("<br/>")
+          flash.now[:alert] = errors
+          @orig_survey_id = params[:id]
+          format.js { render "clone_modal" }
+        end
+      end
+    end
+
     private
 
     def survey_params

@@ -1,0 +1,15 @@
+if($('span.basic-modal div.clone-survey-container').length <=0) {
+  $("<span class='basic-modal'><div class='clone-survey-container'></div></span>").appendTo($('body'))
+}
+<%
+  modal_form = modal id: "clone-survey-modal",
+                     title: "clone survey".cms_js,
+                     has_submit_button: false,
+                     has_close_button: false do
+    render "clone_modal"
+  end
+%>
+$("div.clone-survey-container").html('<%= j modal_form %>');
+<% content_for :script_on_ready do %>
+  $("#clone-survey-modal").modal('show');
+<% end %>
