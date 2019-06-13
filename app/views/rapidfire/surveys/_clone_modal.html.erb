@@ -1,0 +1,28 @@
+<% id = @orig_survey_id.present? ? @orig_survey_id : @survey.id %>
+<% @url = clone_survey_path(id) %>
+<h3>Cloning: <%= @survey.name %></h3>
+
+<%= render "shared/error_messages", error_model: @survey, only: :base %>
+  <div class="fields">
+  
+<%= form_for @survey, url: @url, method: :put, remote: true do |f| %>
+  <%- if @survey.errors.any? %>
+    <ul>
+      <%- @survey.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+    </ul>
+  <% end %>
+
+  <div class="form-group">
+    <%= f.label :name %>
+    <%= f.text_field :name %>
+  </div>
+
+  <div class="form-group">
+    <%= f.label :introduction %>
+    <%= f.text_area :introduction %>
+  </div>
+
+  <%= f.submit %>
+<% end %>

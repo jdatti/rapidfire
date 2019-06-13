@@ -12,6 +12,7 @@
       <% if can_administer? %>
         <li><%= link_to "Results", [:results, survey] %></li>
         <li><%= link_to "Delete", survey, method: :delete %></li>
+        <li><%= link_to "Clone", clone_modal_survey_path(survey.id), remote: true %></li>
       <% end %>
     </ul>
   </td>
