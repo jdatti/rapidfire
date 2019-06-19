@@ -22,6 +22,7 @@ module Rapidfire
         #redirect_to after_answer_path_for
         respond_to do |format|
           format.js { render "rapidfire/attempts/success" }
+          format.json { render json: {}, status: :ok }
           format.html { redirect_to after_answer_path_for }
         end
       else
@@ -29,6 +30,7 @@ module Rapidfire
         respond_to do |format|
           error_message = 'survey_incomplete_message'.cms {'Please fill the Survey.'}
           format.js {render js: "toastr.error('#{error_message}');"}
+          format.json { render json: {errors: [{message: error_message}]}, status: :unprocessable_entity }
           format.html { render :new }
         end
       end
