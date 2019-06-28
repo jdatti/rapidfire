@@ -4,6 +4,7 @@ Rapidfire::Engine.routes.draw do
     member do
       get "export" 
       get 'results'
+      get 'reload_from_source'
     end
     collection do 
       get "export"

@@ -90,6 +90,25 @@ module Rapidfire
     end
   end
 
+  def reload_from_source
+    @survey = Survey.find(params[:id])
+    definition_file = @survey.definition_file
+
+    file_path = Pyr.root.join(definition_file[1, definition_file.length])
+
+    begin
+      r = Survey.import(YAML.load_file(file_path), filepath: definition_file, overwrite: true)
+      if r && (r.definition_file.blank? || r.definition_file != definition_file)
+        r.definition_file = definition_file
+        r.save!
+      end
+    rescue => e
+      Rails.logger.error "Error reloading survey definition file #{definition_file} of Survey[#{r.try(:id)}] - #{r.try(:name)}  :  #{e.message}"
+      Rails.logger.error e&.backtrace || e&.to_s
+    end
+
+    redirect_to r
+  end
 
     private
 
