@@ -8,7 +8,7 @@ json.question_answers do
 		json.id question.id
 		json.title question.question_text
 		json.position question.position
-		json.answer_options question.answer_options
+		json.answer_options question.answer_options.split("\r\n")
 		json.validation_rules question.validation_rules
 		json.display_type question.type.sub("Rapidfire::Questions::", "")
 	end
