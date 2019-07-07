@@ -14,23 +14,16 @@ module Rapidfire
 
     def create
       @attempt_builder = AttemptBuilder.new(attempt_params)
-      if @attempt_builder.save
-        previous_attempt =  Rapidfire::Attempt.find_by(user_id: current_user.id, survey_id: params[:survey_id], active: 1)
-        previous_attempt.update(active: 0) if previous_attempt.present?
 
-        @attempt_builder.attempt.update(active: 1)
-        #redirect_to after_answer_path_for
-        respond_to do |format|
+      respond_to do |format|
+        if @attempt_builder.save
           format.js { render "rapidfire/attempts/success" }
           format.json { render json: {}, status: :ok }
           format.html { redirect_to after_answer_path_for }
-        end
-      else
-        #render :new
-        respond_to do |format|
+        else
           error_message = 'survey_incomplete_message'.cms {'Please fill the Survey.'}
           format.js {render js: "toastr.error('#{error_message}');"}
-          format.json { render json: {errors: [{message: error_message}]}, status: :unprocessable_entity }
+          format.json { render json: {error_message: error_message}.to_json, status: :unprocessable_entity }
           format.html { render :new }
         end
       end
