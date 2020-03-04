@@ -1,16 +1,24 @@
 module Rapidfire
   class SurveysController < Rapidfire::ApplicationController
     if Rails::VERSION::MAJOR == 5
-      before_action :authenticate_administrator!, except: :index
+      before_action :authenticate_administrator!, except: [:index, :results]
     else
-      before_filter :authenticate_administrator!, except: :index
+      before_filter :authenticate_administrator!, except: [:index, :results]
     end
 
     def index
-      @surveys = if defined?(Kaminari)
-        Survey.page(params[:page])
+      if can_administer?
+        @surveys = if defined?(Kaminari)
+          Rapidfire::Survey.page(params[:page])
+        else
+          Rapidfire::Survey.all
+        end
       else
-        Survey.all
+        @surveys = if defined?(Kaminari)
+          Rapidfire::Survey.joins(:attempts).where("rapidfire_attempts.user_id = ?", current_user.id).page(params[:page])
+        else
+          Rapidfire::Survey.joins(:attempts).where("rapidfire_attempts.user_id = ?", current_user.id).all
+        end
       end
     end
 

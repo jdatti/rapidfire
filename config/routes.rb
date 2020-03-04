@@ -13,7 +13,7 @@ Rapidfire::Engine.routes.draw do
     end 
 
     resources :questions
-    resources :attempts, only: [:new, :create, :edit, :update]
+    resources :attempts, only: [:new, :create, :edit, :update, :show]
   end
 
   root :to => "surveys#index"

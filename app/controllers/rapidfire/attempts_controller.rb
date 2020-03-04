@@ -2,8 +2,10 @@ module Rapidfire
   class AttemptsController < Rapidfire::ApplicationController
     if Rails::VERSION::MAJOR ==  5
       before_action :find_survey!
+      before_action :check_resubmit_availability, only: [:create]
     else
       before_filter :find_survey!
+      before_filter :check_resubmit_availability, only: [:create]
     end
 
     def new
@@ -13,20 +15,23 @@ module Rapidfire
     def create
       @attempt_builder = AttemptBuilder.new(attempt_params)
 
-      if @attempt_builder.save
-        #redirect_to after_answer_path_for
-        respond_to do |format|
+      respond_to do |format|
+        if @attempt_builder.save
           format.js { render "rapidfire/attempts/success" }
+          format.json { render json: {}, status: :ok }
           format.html { redirect_to after_answer_path_for }
-        end
-      else
-        #render :new
-        respond_to do |format|
+        else
           error_message = 'survey_incomplete_message'.cms {'Please fill the Survey.'}
           format.js {render js: "toastr.error('#{error_message}');"}
+          format.json { render json: {error_message: error_message}.to_json, status: :unprocessable_entity }
           format.html { render :new }
         end
       end
+    end
+
+    def show
+      @attempt_answers = Rapidfire::Answer.where(attempt_id: params[:id])
+      @survey_questions = Rapidfire::Question.where(survey_id: params[:survey_id])
     end
 
     def edit
@@ -44,6 +49,17 @@ module Rapidfire
     end
 
     private
+
+    def check_resubmit_availability
+      attempted_survey = Rapidfire::Attempt.where(user_id: current_user.id, survey_id: params[:survey_id]).last
+      if attempted_survey.present?
+        if PyrCore::AppSetting.enable_survey_resubmission != "true"
+          respond_to do |format|
+            format.js { render "rapidfire/attempts/submitted" }
+          end
+        end
+      end
+    end
 
     def find_survey!
       @survey = Survey.find(params[:survey_id])
