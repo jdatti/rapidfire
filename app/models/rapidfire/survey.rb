@@ -4,7 +4,7 @@ module Rapidfire
     sub_key :name
     sub_key :introduction
     
-    has_many :attempts, class_name: Rapidfire::Attempt
+    has_many :attempts, class_name: 'Rapidfire::Attempt'
     has_many  :questions
     validates :name, :presence => true
 
