@@ -2,9 +2,9 @@
 <h2><%= survey.new_record? ? "New Survey" : "Edit Survey" %></h2>
   <%= form_for survey do |f| %>
     <%- if survey.errors.any? %>
-      <ul>
+      <ul class="valid-errors text-center">
         <%- survey.errors.full_messages.each do |message| %>
-          <li><%= message %></li>
+          <li class="text-danger"><%= message %></li>
         <% end %>
       </ul>
     <% end %>
@@ -18,7 +18,8 @@
       <%= f.label :introduction %>
       <%= f.text_area :introduction %>
     </div>
-
-    <%= f.submit :class => "btn btn-default" %>
+    <div class="clearfix">
+      <%= f.submit :class => "btn btn-primary pull-right" %>
+    </div>
   <% end %>
 </div>
