@@ -5,3 +5,5 @@ $('.attempts_new #main-content > div').removeClass('survey-attempt-form').addCla
   success_message = 'survey_success_message'.cms {'Thanks for your inputs.'}
 %>
 toastr.success('<%= success_message %>');
+
+$(document).trigger("trigger_survey_success_complete");	

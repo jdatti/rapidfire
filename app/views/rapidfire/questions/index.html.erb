@@ -2,37 +2,39 @@
   <h2>
     <%= t('rapidfire.questions.header') -%>
   </h2>
-  <h3>
-    <%= link_to t('rapidfire.questions.new'), new_survey_question_path(@survey) %>
-  </h3>
-  <h4>
-    <%= link_to t('rapidfire.questions.back'), surveys_path(@survey) %>
-  </h4>
-  <hr/>
-
-<div>
-  <%= link_to "cms".cms,
+  <div class="surveys-btns">
+    <div>
+      <%= link_to t('rapidfire.questions.new'), new_survey_question_path(@survey), class: "btn btn-primary" %>
+    </div>
+    <div>
+       <%= link_to "cms".cms,
                       main_app.show_cms_instance_keys_path(@survey.class.to_s, @survey.id),
                       class: "btn btn-default",
-                      target: "_blank" %> <br/><br/>
-  <%= "survey_name:".cms %>&nbsp&nbsp
-  <%= @survey.cms_name %><br/>
-  <%= "introduction:".cms %>&nbsp&nbsp
-  <%= @survey.cms_introduction %>
- </div>
+                      target: "_blank" %>
+    </div>
+  </div>
+  <hr/>
 
-<table>
-  <colgroup>
-    <col>
-    <col width="250">
-  </colgroup>
-  <thead>
-    <tr>
-      <th><%= t('rapidfire.questions.question') -%></th>
-      <th></th>
-    </tr>
-  </thead>
-  <tbody>
-    <%= render partial: "question", collection: @questions %>
-  </tbody>
-</table>
+<div style="padding: 0 15px;">
+  <label><%= "survey_name:".cms %></label>&nbsp&nbsp
+  <strong><%= @survey.cms_name %><strong><br/>
+  <label><%= "introduction:".cms %></label>&nbsp&nbsp
+  <strong><%= @survey.cms_introduction %></strong>
+ </div>
+<div class="table-responsive">
+  <table class="table survey-questions">
+    <colgroup>
+      <col>
+      <col width="250">
+    </colgroup>
+    <thead>
+      <tr>
+        <th><%= t('rapidfire.questions.question') -%></th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <%= render partial: "question", collection: @questions %>
+    </tbody>
+  </table>
+</div>

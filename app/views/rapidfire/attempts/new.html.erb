@@ -1,4 +1,12 @@
 <%
   defined?(remote) or remote = true
+  modal_id ||= ""
+  step_by_step = false if step_by_step.nil?
+  
+  locals = {
+    modal_id: modal_id,
+    step_by_step: step_by_step
+  }
+  locals.merge!({ submit_text: t('rapidfire.attempts.save'), remote: remote })
 %>
-<%= render partial: 'rapidfire/attempts/form', locals: { submit_text: t('rapidfire.attempts.save'), remote: remote } %>
+<%= render partial: 'rapidfire/attempts/form', locals: locals %>

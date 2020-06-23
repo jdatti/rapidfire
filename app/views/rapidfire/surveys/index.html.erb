@@ -1,26 +1,30 @@
 <div class="survey-attempt-form">
 <h2>Surveys</h2>
-<p class="survey-title"><% if can_administer? %>
-    <%= link_to "New Survey", new_survey_path %>
-  <% end %>
-</p>
-<div>
-  <h4><%= link_to t('Back to home'), '/' %></h4>
-  <h4><%= link_to t('Export All'), export_surveys_path() %></h4>
-  <h4><%= link_to t('Import'), import_surveys_path() %></h4>
+<div class="surveys-btns">
+  <div>
+    <% if can_administer? %>
+      <%= link_to "New Survey", new_survey_path, class: "btn btn-primary" %>
+    <% end %>
+  </div>
+  <div>
+    <%#= link_to t('Back to home'), '/', class: "btn btn-default" %>
+    <%= link_to t('Export All'), export_surveys_path(), class: "btn btn-default" %>
+    <%= link_to t('Import'), import_surveys_path(), class: "btn btn-default" %>
+  </div>
 </div>
-
-<table class="table table-striped">
-  <thead>
-    <tr>
-      <th>Survey</th>
-      <th>Actions</th>
-    </tr>
-  </thead>
-  <tbody>
-    <%= render partial: "survey", collection: @surveys %>
-  </tbody>
-</table>
+<div class="table-responsive">
+  <table class="table surveys-list">
+    <thead>
+      <tr>
+        <th>Survey</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <%= render partial: "survey", collection: @surveys %>
+    </tbody>
+  </table>
+</div>
 </div>
 <% if defined?(Kaminari) %>
   <%= paginate @surveys %>
