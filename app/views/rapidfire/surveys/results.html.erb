@@ -2,16 +2,17 @@
   <h2>Results</h2>
   <%- @survey_results.each do |result| %>
     <div>
-      <h4><%= result.question.question_text %></h4>
-      <p>
+      <h4 style="margin-bottom: 0;padding-left: 15px;"><%= result.question.question_text %></h4>
         <%- if result.results.is_a?(Array) %>
-          <ol>
+          <ol style="margin: 0 15px;">
             <%- result.results.each do |answer| %>
               <li><%= answer %></li>
+              <li><%= "6" %></li>
             <% end %>
           </ol>
         <% elsif result.results.is_a?(Hash) %>
-          <table>
+        <div class="table-responsive" style="padding-top: 0;">
+          <table class="table table-striped" style="margin-bottom: 0;">
             <thead>
               <tr>
                 <th>Option</th>
@@ -27,6 +28,7 @@
               <% end %>
             </tbody>
           </table>
+        </div>
         <% end %>
     </div>
   <% end %>

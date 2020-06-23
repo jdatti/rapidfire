@@ -1,13 +1,37 @@
-<div class="survey-attempt-form">
-  <h2><%= t('rapidfire.attempts.header') -%></h2>
-  <p class="survey-title"><%= @survey.introduction %></p>
+<%
+  modal_id ||= ""
+  step_by_step = false if step_by_step.nil?
+%>
 
-  <%= form_for([@survey, @attempt_builder], data: {remote: remote}, url: rapidfire.survey_attempts_path(@survey, @attempt_builder)) do |f| %>
-    <%- @attempt_builder.answers.each do |answer| %>
-      <%= f.fields_for("#{answer.question.id}", answer) do |answer_form| %>
-        <%= render_answer_form_helper(answer, answer_form) %>
+<% if step_by_step %>
+  <div class="survey-attempt-form">
+    <%= form_for([@survey, @attempt_builder], data: {remote: remote}, url: rapidfire.survey_attempts_path(@survey, @attempt_builder)) do |f| %>
+      <%- @attempt_builder.answers.each_with_index do |answer, i| %>
+        <%= f.fields_for("#{answer.question.id}", answer) do |answer_form| %>
+          <div id="survey_<%= @survey.id %>_<%= answer.question.id %>" style="<%= i == 0 ? '' : 'display: none'; %>">
+            <%= render_answer_form_helper(answer, answer_form) %>
+          </div>
+        <% end %>
       <% end %>
+      <div class="pull-right">
+        <%= f.submit submit_text, class: "btn btn-default", id: "survey_attempt_form", style: "display: none" %>
+        <%= link_to "next".cms, "javascript:void(0);", class: "btn btn-primary survey-question-next", data: { next: @attempt_builder.answers.first.question.id } %>
+        <%= link_to "remind_me_later".cms, "##{modal_id}", class: "btn btn-primary", data: { toggle: :modal } %>
+      </div>
     <% end %>
-    <%= f.submit submit_text,  :class => 'btn btn-default' %>
-  <% end %>
-</div>
+  </div>
+<% else %>
+  <div class="survey-attempt-form">
+    <h2><%= t('rapidfire.attempts.header') -%></h2>
+    <p class="survey-title"><%= @survey.introduction %></p>
+
+    <%= form_for([@survey, @attempt_builder], data: {remote: remote}, url: rapidfire.survey_attempts_path(@survey, @attempt_builder)) do |f| %>
+      <%- @attempt_builder.answers.each do |answer| %>
+        <%= f.fields_for("#{answer.question.id}", answer) do |answer_form| %>
+          <%= render_answer_form_helper(answer, answer_form) %>
+        <% end %>
+      <% end %>
+      <%= f.submit submit_text,  :class => 'btn btn-default' %>
+    <% end %>
+  </div>
+<% end %>
