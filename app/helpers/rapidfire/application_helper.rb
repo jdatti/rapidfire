@@ -1,8 +1,8 @@
 module Rapidfire
   module ApplicationHelper
-    def render_answer_form_helper(answer, form)
+    def render_answer_form_helper(answer, form, options={})
       partial = answer.question.type.to_s.split("::").last.downcase
-      render partial: "rapidfire/answers/#{partial}", locals: { f: form, answer: answer }
+      render partial: "rapidfire/answers/#{partial}", locals: { f: form, answer: answer, options: options }
     end
 
     def checkbox_checked?(answer, option)
