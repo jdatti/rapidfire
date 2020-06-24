@@ -2,10 +2,12 @@
   defined?(remote) or remote = true
   modal_id ||= ""
   step_by_step = false if step_by_step.nil?
+  remind_me_later = false if remind_me_later.nil?
   
   locals = {
     modal_id: modal_id,
-    step_by_step: step_by_step
+    step_by_step: step_by_step,
+    remind_me_later: remind_me_later
   }
   locals.merge!({ submit_text: t('rapidfire.attempts.save'), remote: remote })
 %>

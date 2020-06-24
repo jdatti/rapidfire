@@ -1,5 +1,9 @@
 <%= render partial: "rapidfire/answers/errors", locals: {answer: answer} %>
+<% 
+  options ||= {}
+  counter = options[:counter]
+%>
 <div class="form-group">
-<%= f.label :answer_text, answer.question.question_text %>
-<%= f.text_field :answer_text %>
+  <%= f.label :answer_text, "#{counter}. #{answer.question.question_text}" %>
+  <%= f.text_field :answer_text %>
 </div>
