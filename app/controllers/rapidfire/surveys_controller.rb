@@ -19,6 +19,7 @@ module Rapidfire
         else
           Rapidfire::Survey.joins(:attempts).where("rapidfire_attempts.user_id = ?", current_user.id).all
         end
+        @admin_layout = false
       end
     end
 

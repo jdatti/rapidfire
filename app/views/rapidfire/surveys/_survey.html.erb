@@ -1,5 +1,4 @@
-<% recent_attempt = Rapidfire::Attempt.find_by(user_id: current_user.id, survey_id: survey.id, active: 1) %>
-
+<% recent_attempt = Rapidfire::Attempt.find_by(user_id: current_user.id, survey_id: survey.id) %>
 <div class="survey-attempt-form">
   <tr id= "survey_<%= survey.id %>">
     <td>
@@ -17,7 +16,9 @@
           <li><%= link_to "Export", export_survey_path(survey), class: "btn btn-default" %></li>
         <% else %>
           <li><%= link_to "Answer Questions", new_survey_attempt_path(survey), class: "btn btn-default" %></li>
-          <li><%= link_to "view", survey_attempt_path(id: recent_attempt.id, survey_id: survey.id), class: "btn btn-default" %></li>
+          <%if recent_attempt %>
+            <li><%= link_to "view", survey_attempt_path(id: recent_attempt.id, survey_id: survey.id), class: "btn btn-default" %></li>
+          <% end %>
         <% end %>
       </ul>
     </td>

@@ -10,6 +10,7 @@ module Rapidfire
 
     def new
       @attempt_builder = AttemptBuilder.new(attempt_params)
+      @admin_layout = false
     end
 
     def create
@@ -32,10 +33,12 @@ module Rapidfire
     def show
       @attempt_answers = Rapidfire::Answer.where(attempt_id: params[:id])
       @survey_questions = Rapidfire::Question.where(survey_id: params[:survey_id])
+      @admin_layout = false
     end
 
     def edit
       @attempt_builder = AttemptBuilder.new(attempt_params)
+      @admin_layout = false
     end
 
     def update
