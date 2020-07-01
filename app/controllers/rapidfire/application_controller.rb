@@ -1,13 +1,16 @@
 module Rapidfire
-  class ApplicationController < ::ApplicationController
+  class ApplicationController < PyrCore::PyrAdminController
     if Rapidfire.layout
+
       layout Rapidfire.layout
     end
 
     helper_method :can_administer?
 
     def authenticate_administrator!
-      unless can_administer?
+      if can_administer?
+        @admin_layout = true
+      else
         raise Rapidfire::AccessDenied.new("cannot administer questions")
       end
     end

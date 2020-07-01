@@ -1,17 +1,17 @@
 <div class="survey-attempt-form">
 <h2>Surveys</h2>
-<div class="surveys-btns">
-  <div>
-    <% if can_administer? %>
+<% if can_administer? %>
+  <div class="surveys-btns">
+    <div>
       <%= link_to "New Survey", new_survey_path, class: "btn btn-primary" %>
-    <% end %>
-  </div>
-  <div>
-    <%#= link_to t('Back to home'), '/', class: "btn btn-default" %>
-    <%= link_to t('Export All'), export_surveys_path(), class: "btn btn-default" %>
-    <%= link_to t('Import'), import_surveys_path(), class: "btn btn-default" %>
-  </div>
+    </div>
+    <div>
+      <%#= link_to t('Back to home'), '/', class: "btn btn-default" %>
+      <%= link_to t('Export All'), export_surveys_path(), class: "btn btn-default" %>
+      <%= link_to t('Import'), import_surveys_path(), class: "btn btn-default" %>
+    </div>
 </div>
+<% end %>
 <div class="table-responsive">
   <table class="table surveys-list">
     <thead>

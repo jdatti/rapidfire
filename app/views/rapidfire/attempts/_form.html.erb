@@ -1,6 +1,8 @@
 <%
   modal_id ||= ""
   step_by_step = false if step_by_step.nil?
+  remind_me_later = false if remind_me_later.nil?
+  number_of_questions = @attempt_builder.answers.try(:size)
 %>
 
 <% if step_by_step %>
@@ -9,14 +11,16 @@
       <%- @attempt_builder.answers.each_with_index do |answer, i| %>
         <%= f.fields_for("#{answer.question.id}", answer) do |answer_form| %>
           <div id="survey_<%= @survey.id %>_<%= answer.question.id %>" style="<%= i == 0 ? '' : 'display: none'; %>">
-            <%= render_answer_form_helper(answer, answer_form) %>
+            <%= render_answer_form_helper(answer, answer_form, { counter: i + 1 }) %>
+            <input type="hidden" id='q_<%= answer.question.id %>_rules' value='<%= answer.question.validation_rules.to_json %>' />
+            <input type="hidden" id='q_<%= answer.question.id %>_type' value='<%= answer.question.type %>' />
           </div>
         <% end %>
       <% end %>
       <div class="pull-right">
-        <%= f.submit submit_text, class: "btn btn-default", id: "survey_attempt_form", style: "display: none" %>
-        <%= link_to "next".cms, "javascript:void(0);", class: "btn btn-primary survey-question-next", data: { next: @attempt_builder.answers.first.question.id } %>
-        <%= link_to "remind_me_later".cms, "##{modal_id}", class: "btn btn-primary", data: { toggle: :modal } %>
+        <%= f.submit submit_text, class: "btn btn-default", id: "survey_attempt_form_#{@survey.id}", style: "#{number_of_questions == 1 ? '' : 'display: none'}" %>
+        <%= link_to "next".cms, "javascript:void(0);", class: "btn btn-primary survey-question-next", data: { next: @attempt_builder.answers.first.question.id }, style: "#{number_of_questions == 1 ? 'display: none' : ''}" %>
+        <%= link_to "remind_me_later".cms, "##{modal_id}", class: "btn btn-primary", data: { toggle: :modal } if remind_me_later %>
       </div>
     <% end %>
   </div>
@@ -26,9 +30,9 @@
     <p class="survey-title"><%= @survey.introduction %></p>
 
     <%= form_for([@survey, @attempt_builder], data: {remote: remote}, url: rapidfire.survey_attempts_path(@survey, @attempt_builder)) do |f| %>
-      <%- @attempt_builder.answers.each do |answer| %>
+      <%- @attempt_builder.answers.each_with_index do |answer, i| %>
         <%= f.fields_for("#{answer.question.id}", answer) do |answer_form| %>
-          <%= render_answer_form_helper(answer, answer_form) %>
+          <%= render_answer_form_helper(answer, answer_form, { counter: i + 1 }) %>
         <% end %>
       <% end %>
       <%= f.submit submit_text,  :class => 'btn btn-default' %>
